@@ -8,6 +8,7 @@ class Settings():
         self.bgColor = (0, 0, 0)
 
         self.shipSpeedFactor = 10
+        self.shipDestroySound = pygame.mixer.Sound('sounds\explosion.wav')
         self.angle = 0
 
         self.bullet_speed_factor = 15
@@ -16,6 +17,7 @@ class Settings():
         self.ship_limit = 3
 
         self.asteroidPoints = 10
+        self.asteroidDestroySound = pygame.mixer.Sound('sounds\explosionAsteroid.wav')
 
         self.fileHighScore = "highscore.txt"
 

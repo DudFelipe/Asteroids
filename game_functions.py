@@ -19,7 +19,7 @@ def ship_hit(aiSettings, ship, stats, bullets, asteroids, sb):
         asteroids.empty()
 
         ship.center_ship()
-
+        
         sleep(0.5)
     else:
         stats.saveHighScore()
@@ -39,6 +39,7 @@ def update_asteroid(asteroids, aiSettings, stats, ship, bullets, sb):
             asteroid.speed_factory = asteroid.speed_factory * -1
 
         if pygame.sprite.spritecollideany(ship, asteroids):
+            aiSettings.shipDestroySound.play()
             ship_hit(aiSettings, ship, stats, bullets, asteroids, sb)
 
 def create_asteroid(aiSettings, screen, asteroids):
@@ -52,6 +53,7 @@ def checkBulletCollision(aiSettings, stats, sb, bullets, asteroids):
         for asteroids in collisions.values():
             stats.score += aiSettings.asteroidPoints
             sb.prepScore()
+            aiSettings.asteroidDestroySound.play()
         check_highscore(stats, sb)
 
 def updateBullets(bullets, asteroids, aiSettings, sb, stats):

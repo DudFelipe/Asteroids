@@ -14,7 +14,7 @@ class Ship(Sprite):
         self.screen_rect = screen.get_rect()
 
         self.rect.centerx = self.screen_rect.centerx
-        self.rect.centery = self.screen_rect.centery
+        self.rect.centery = self.screen_rect.centery 
 
         self.centerx = float(self.rect.centerx)
         self.centery = float(self.rect.centery)
