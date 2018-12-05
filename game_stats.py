@@ -5,6 +5,7 @@ class GameStats():
         self.reset_stats()
 
         self.game_active = False
+        self.game_options = False
         self.getHighScore()
 
     def getHighScore(self):

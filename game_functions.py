@@ -4,6 +4,30 @@ from bullet import Bullet
 from asteroid import Asteroid
 from time import sleep    
 
+def checkButtonsMenu(aiSettings, screen, stats, sb, menu, ship, asteroids, bullets, mouseX, mouseY):
+    playClicked = menu.btnPlay.rect.collidepoint(mouseX, mouseY)
+    exitClicked = menu.btnExit.rect.collidepoint(mouseX, mouseY)
+
+    if playClicked and not stats.game_active:
+        aiSettings.initializeGameSettings()
+
+        pygame.mouse.set_visible(False)
+
+        stats.reset_stats()
+        stats.game_active = True
+
+        sb.prepHighScore()
+        sb.prepScore()
+        sb.prepShips()
+
+        asteroids.empty()
+        bullets.empty()
+
+        ship.center_ship()
+
+    elif exitClicked:
+        sys.exit() 
+
 def check_highscore(stats, sb):
     if stats.score > int(stats.highScore):
         stats.highScore = stats.score
@@ -72,7 +96,7 @@ def fire_bullet(aiSettings, screen, ship, bullets):
     new_bullet.sound.play()
 
 def checkKeydownEvents(event, aiSettings, screen, ship, bullets, asteroids, stats, sb):
-    if event.key == pygame.K_q:
+    if event.key == pygame.K_ESCAPE:
         sys.exit()
     
     elif event.key == pygame.K_UP:
@@ -88,16 +112,8 @@ def checkKeydownEvents(event, aiSettings, screen, ship, bullets, asteroids, stat
         fire_bullet(aiSettings, screen, ship, bullets)
 
     elif event.key == pygame.K_r:
-        stats.reset_stats()
-        stats.game_active = True
-
-        sb.prepScore()
-        sb.prepShips()
-
-        asteroids.empty()
-        bullets.empty()
-
-        ship.center_ship()
+        stats.game_active = False
+        pygame.mouse.set_visible(True)
 
 def checkKeyupEvents(event, ship):
     if event.key == pygame.K_UP:
@@ -109,7 +125,7 @@ def checkKeyupEvents(event, ship):
     elif event.key == pygame.K_RIGHT:
         ship.spiningRight = False
 
-def checkEvents(aiSettings, screen, ship, bullets, asteroids, stats, sb):
+def checkEvents(aiSettings, screen, ship, bullets, asteroids, stats, sb, menu):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -120,17 +136,25 @@ def checkEvents(aiSettings, screen, ship, bullets, asteroids, stats, sb):
         elif event.type == pygame.KEYUP:
             checkKeyupEvents(event, ship)
 
-def updateScreen(aiSettings, screen, ship, bullets, asteroids, sb):
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouseX, mouseY = pygame.mouse.get_pos()
+            checkButtonsMenu(aiSettings, screen, stats, sb, menu, ship, asteroids, bullets, mouseX, mouseY)
+
+def updateScreen(aiSettings, screen, ship, bullets, asteroids, sb, stats, menu):
     screen.fill(aiSettings.bgColor)
 
-    for bullet in bullets:
-        bullet.blitme()
+    if not stats.game_active:
+        menu.drawOptions()
 
-    for asteroid in asteroids:
-        asteroid.blitme()
+    else:
+        for bullet in bullets:
+            bullet.blitme()
 
-    sb.showScore()
+        for asteroid in asteroids:
+            asteroid.blitme()
 
-    ship.blitme()
+        sb.showScore()
+
+        ship.blitme()
 
     pygame.display.flip()

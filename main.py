@@ -7,6 +7,7 @@ from pygame.sprite import Group
 from game_stats import GameStats
 from scoreboard import Scoreboard
 import game_functions as gf
+from menu import Menu
 
 def run_game():
     pygame.init()
@@ -20,6 +21,8 @@ def run_game():
 
     pygame.display.set_caption("Asteroids")
 
+    menu = Menu(aiSettings, screen)
+
     stats = GameStats(aiSettings)
     sb = Scoreboard(aiSettings, screen, stats)
 
@@ -30,7 +33,7 @@ def run_game():
 
     while True:
         clock.tick(60)
-        gf.checkEvents(aiSettings, screen, ship, bullets, asteroids, stats, sb)
+        gf.checkEvents(aiSettings, screen, ship, bullets, asteroids, stats, sb, menu)
 
         if stats.game_active:
             ship.update()
@@ -43,6 +46,6 @@ def run_game():
 
             gf.update_asteroid(asteroids, aiSettings, stats, ship, bullets, sb)
             
-        gf.updateScreen(aiSettings, screen, ship, bullets, asteroids, sb)
+        gf.updateScreen(aiSettings, screen, ship, bullets, asteroids, sb, stats, menu)
         
 run_game()
